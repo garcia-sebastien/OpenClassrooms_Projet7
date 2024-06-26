@@ -11,7 +11,6 @@ st.title("OpenClassrooms Projet 7 - Probabilité de faillite d'un client")
 st.markdown("""---""")
 
 # Initialisation des variables
-uploaded_file = None
 id_string = '0'
 submit = None
 prediction = 'nan'
@@ -21,12 +20,9 @@ probabilites = 'nan'
 st.sidebar.write("Créé par Sébastien Garcia")
 
 # ----------- File upload
-uploaded_file = st.file_uploader("Téléchargez le fichier de données d'entrée.", type=['csv'])
-
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.markdown("""---""")
-    id_string = st.text_input("Spécifier l'ID du client (SK_ID_CURR).")
+df = pd.read_csv('data.csv')
+st.markdown("""---""")
+id_string = st.text_input("Spécifier l'ID du client à analyser (SK_ID_CURR).")
   
 st.markdown("""---""")
 if len(id_string) >= 6:
@@ -125,9 +121,6 @@ if submit:
     
         # Suppression de la colonne SK_ID_CURR
         data = data.drop(columns=['SK_ID_CURR'])
-    
-        # Réduction du dataset pour diminuer les temps d'entraînement de SHAP Explainer
-        data = data.sample(frac=0.1, random_state=42)
     
         # Séparation en ensemble d'entraînement et de test
         X_train, X_test = train_test_split(data, test_size=0.05, random_state=42)
